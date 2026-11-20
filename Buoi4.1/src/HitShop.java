@@ -214,6 +214,13 @@ public class HitShop {
                 break;
 
             case 3:
+                System.out.println("=== Chọn loại sản phẩm mới ===");
+                System.out.println("1. Product - Sản phẩm thông thường");
+                System.out.println("2. Book - Sách");
+                System.out.println("3. Cake - Bánh");
+                System.out.print("Lựa chọn của bạn: ");
+                int select = Integer.parseInt(sc.nextLine());
+
                 System.out.println("=== Nhập thông tin sản phẩm ===");
                 System.out.print("Nhập mã sản phẩm: ");
                 String productId = sc.nextLine();
@@ -224,8 +231,44 @@ public class HitShop {
                 System.out.print("Nhập tồn kho: ");
                 int productStock = Integer.parseInt(sc.nextLine());
 
-                Product product = new Product(productId, productName, productPrice, productStock);
-                orderUpdate.setProduct(product);
+                Product newProduct;
+                switch (select) {
+                    case 1:
+                        newProduct = new Product(productId, productName, productPrice, productStock);
+                        break;
+                    case 2:
+                        System.out.print("Nhập tên tác giả: ");
+                        String author = sc.nextLine();
+                        newProduct = new Book(productId, productName, productPrice, productStock, author);
+                        break;
+                    case 3:
+                        System.out.print("Nhập thương hiệu bánh: ");
+                        String brand = sc.nextLine();
+                        newProduct = new Cake(productId, productName, productPrice, productStock, brand);
+                        break;
+                    default:
+                        System.out.println("Lựa chọn không hợp lệ!");
+                        return;
+                }
+
+                if (orderUpdate.getQuantity() > newProduct.getStock()) {
+                    System.out.println("Số lượng hiện tại trong đơn vượt tồn kho sản phẩm mới!");
+                    return;
+                }
+
+                orderUpdate.setProduct(newProduct);
+
+                boolean foundInProducts = false;
+                for (int i = 0; i < products.size(); i++) {
+                    if (products.get(i).getId().equalsIgnoreCase(productId)) {
+                        products.set(i, newProduct);
+                        foundInProducts = true;
+                        break;
+                    }
+                }
+                if (!foundInProducts) {
+                    products.add(newProduct);
+                }
                 break;
 
             case 4:
