@@ -12,24 +12,15 @@ public class HitShop {
 
     private static final Customer currentCustomer = new Customer("C01", "Linh Nguyễn", "0900000001");
 
-    private static final List<CartItem> cart = new ArrayList<>();
-
-    private static final List<Product> products = new ArrayList<>();
-
-    private static final Product p1 = new Product("P01", "Ao thun", 150000, 20 );
+    private static final Product p1 = new Product("P01", "Ao thun", 150000, 20);
     private static final Product p2 = new Product("P02", "Binh nuoc", 50000, 10);
-
     private static final Book p3 = new Book("P03", "Java cơ bản", 120000, 5, "An Nguyen");
 
-
-//    static void addItem(Product product, int quantity) {
-//        CartItem item = new CartItem(product, quantity);
-//        cart.add(item);
-//        System.out.println("Them mat hang vao gio");
-//
+    private static final List<CartItem> cart = new ArrayList<>();
+    private static final List<Product> products = new ArrayList<>();
 
     static void addItems(Scanner sc) {
-        System.out.print("Nhap ma san pham: ");
+        System.out.print("Nhập mã sản phẩm: ");
         String id = sc.nextLine();
 
         Product product = null;
@@ -42,20 +33,21 @@ public class HitShop {
         }
 
         if (product == null) {
-            System.out.println("Khong tim thay san pham!");
+            System.out.println("Không tìm thấy sanr phẩm");
             return;
         }
 
-        System.out.print("Nhap so luong: ");
+        System.out.print("Nhập số lượng: ");
         int quantity = sc.nextInt();
         sc.nextLine();
 
         if (quantity <= 0) {
-            System.out.println("So luong khong hop le!");
+            System.out.println("Số lượng không hợp lệ!");
             return;
         }
 
         cart.add(new CartItem(product, quantity));
+        System.out.println("Đã thêm mặt hàng vào giỏ");
 
     }
 
@@ -63,17 +55,17 @@ public class HitShop {
         index = index -1;
         if (index >= 0 && index < cart.size()) {
             cart.remove(index);
-            System.out.println("Da xoa mat hang");
+            System.out.println("Đã xóa mặt hàng");
         } else {
-            System.out.println("Khong tim thay");
+            System.out.println("Không tìm thấy");
         }
     }
 
     static void printItems(){
-        System.out.println("Khach hang hien tai: " + currentCustomer);
+        System.out.println("Khách hàng hiện tại: " + currentCustomer);
 
         if(cart.isEmpty()){
-            System.out.println("Gio hang dang trong");
+            System.out.println("Giỏ hàng đang trống");
             return;
         }
         for (int i = 0; i < cart.size(); i++) {
@@ -97,13 +89,13 @@ public class HitShop {
         System.out.println("3. Xem giỏ");
         System.out.println("4. Xem tổng tiền");
         System.out.println("5. printCatalog");
-        System.out.println("6. Kiem tra don hang");
+        System.out.println("6. Kiểm tra đơn hàng");
         System.out.println("0. Thoát");
     }
 
     static void printCatalog() {
 
-        System.out.println("----DANH SACH SAN PHAM----");
+        System.out.println("----DANH SÁCH SẢN PHẨM----");
 
         for (int i = 0; i < products.size(); i++) {
             System.out.println(products.get(i).getDescription());
@@ -112,16 +104,23 @@ public class HitShop {
 
     static void testOrder() {
 
-        Order order = new Order(currentCustomer, "O01");
+        Order order1 = new Order(currentCustomer, "O01");
 
-        order.addItem(new CartItem(p1, 2));
-        order.addItem(new CartItem(p2, 1));
+        order1.addItem(new CartItem(p1, 2));
+        order1.addItem(new CartItem(p2, 1));
 
-        order.confirm();
-        System.out.println("Trang thai: " + order.getStatus());
+        System.out.println("Trạng thái ban đầu: " + order1.getStatus());
+        System.out.println("Tổng đơn hàng: " + order1.getTotal());
 
-        order.cancel();
-        System.out.println("Sau khi huy: " + order.getStatus());
+        order1.confirm();
+        order1.cancel();
+        System.out.println("Trạng thái order1: " + order1.getStatus());
+
+        Order order2 = new Order(currentCustomer, "002");
+
+        order2.cancel();
+        order2.confirm();
+        System.out.println("Trạng thái order2: " + order2.getStatus());
     }
 
     public static void main(String[] args){
@@ -130,8 +129,6 @@ public class HitShop {
     products.add(p1);
     products.add(p2);
     products.add(p3);
-
-    System.out.println("so san pham da tao: " + Product.getCount());
 
     int choice;
 
@@ -147,14 +144,16 @@ public class HitShop {
                 addItems(sc);
                 break;
             case 2:
-                System.out.print("Nhap so thu tu mat hang can xoa: ");
-                removeItem(sc.nextInt());
+                System.out.print("Nhập thứ tự mặt hàng cần xóa: ");
+                int index = sc.nextInt();
+                sc.nextLine();
+                removeItem(index);
                 break;
             case 3:
                 printItems();
                 break;
             case 4:
-                System.out.println("Tong tien: " + calculateTotal());
+                System.out.println("Tổng tiền: " + calculateTotal());
                 break;
             case 5:
                 printCatalog();
@@ -163,15 +162,15 @@ public class HitShop {
                 testOrder();
                 break;
             case 0:
-                System.out.println("Thoat");
+                System.out.println("Thoát");
                 break;
             default:
-                System.out.println("Lua chon khong hop le");
+                System.out.println("Lựa chọn không hợp lệ");
         }
         System.out.println();
 
     }while(choice != 0);
 
     sc.close();
-}
+    }
 }

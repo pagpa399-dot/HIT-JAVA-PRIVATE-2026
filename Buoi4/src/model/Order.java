@@ -13,7 +13,7 @@ public class Order {
         this.customer = customer;
         this.id = id;
         this.items = new ArrayList<>();
-        this.status = "Pending";
+        this.status = "PENDING";
     }
 
     public String getId() {
@@ -34,7 +34,7 @@ public class Order {
 
     public void addItem(CartItem item){
         if(item == null){
-            throw new IllegalArgumentException("Khong hop le");
+            throw new IllegalArgumentException("Không hợp lệ");
         }
 
         items.add(item);
@@ -43,20 +43,20 @@ public class Order {
     public double getTotal() {
         double total = 0;
 
-        for (int i = 0; i < items.size(); i++) {
-            total += items.get(i).getTotal();
+        for (CartItem item : items) {
+            total += item.getTotal();
         }
         return total;
     }
 
     public void confirm(){
-        if(status.equals("Pending")){
+        if(status.equals("PENDING")){
             status = "CONFIRMED";
         }
     }
 
     public void cancel(){
-        if(status.equals("Pending")){
+        if(status.equals("PENDING")){
             status = "CANCELLED";
         }
     }

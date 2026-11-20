@@ -8,10 +8,13 @@ public class Product {
 
     private static int count = 0;
 
+    public Product(){
+    }
+
     public Product(String id, String name, double price, int stock) {
 
         if(id == null || id.trim().isEmpty()){
-            throw new IllegalArgumentException("Ma khong duoc trong");
+            throw new IllegalArgumentException("Mã sản phẩm không được trống");
         }
 
         if(name == null || name.trim().isEmpty()){
@@ -55,7 +58,7 @@ public class Product {
 
     public void setPrice(double price) {
         if(price <= 0){
-            throw new IllegalArgumentException("Gia phai lon hon 0");
+            throw new IllegalArgumentException("Giá phải lớn hơn 0");
         }
         else{
             this.price = price;
@@ -64,7 +67,7 @@ public class Product {
 
     public void decreaseStock(int quantity){
         if(quantity <= 0 || quantity > stock){
-            throw new IllegalArgumentException("So luong khing hop le");
+            throw new IllegalArgumentException("Số lượng không hợp lệ");
         }
         stock -= quantity;
     }
@@ -73,8 +76,12 @@ public class Product {
         return name;
     }
 
+    public static int getCount() {
+        return count;
+    }
+
     @Override
     public String toString() {
-        return id + " | " + name + " | " + price + " | ton: " + stock;
+        return id + " | " + getDescription() + " | Giá: " + price + " | Tồn: " + stock;
     }
 }

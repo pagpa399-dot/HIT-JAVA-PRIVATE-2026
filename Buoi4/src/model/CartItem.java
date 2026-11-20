@@ -5,6 +5,11 @@ public class CartItem {
     private int quantity;
 
     public CartItem(Product product, int quantity) {
+        if(product == null){
+            throw new IllegalArgumentException("Sản phẩm không hợp lệ");
+        }
+        if (quantity <= 0) { // [BỔ SUNG] Chặn số lượng <= 0
+            throw new IllegalArgumentException("Số lượng phải lớn hơn 0");}
         this.product = product;
         this.quantity = quantity;
     }
@@ -18,6 +23,9 @@ public class CartItem {
     }
 
     public void setQuantity(int quantity) {
+        if(quantity <= 0) {
+            throw new IllegalArgumentException("Vui lòng thử lại");
+        }
         this.quantity = quantity;
     }
 
